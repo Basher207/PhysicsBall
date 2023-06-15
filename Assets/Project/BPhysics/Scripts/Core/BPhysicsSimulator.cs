@@ -42,6 +42,7 @@ namespace PhysicsBall
 
     public class BPhysicsSimulator : MonoBehaviour
     {
+        //PlaceHolder singleton for easy access to the simulator 
         public static BPhysicsSimulator instance;
 
         [SerializeField] private BPhysicsSurface bPhysicsSurface;

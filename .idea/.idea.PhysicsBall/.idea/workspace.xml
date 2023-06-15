@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="21234c07-2cfe-4da9-b8be-6c578ad2b91e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/Core/BPhysicsSimulator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/Core/BPhysicsSimulator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/Core/BPhysicsSurface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/Core/BPhysicsSurface.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/PhysicsObjects/BPhysicsBall.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/BPhysics/Scripts/PhysicsObjects/BPhysicsBall.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Surface Generation/Scripts/CurvedSurface.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Surface Generation/Scripts/CurvedSurface.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/Surface Generation/Scripts/MeshMaker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/Surface Generation/Scripts/MeshMaker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/TrailBall/Prefabs/Ball.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/TrailBall/Prefabs/Ball.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/UserInput/Prefabs/UI.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/UserInput/Prefabs/UI.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Project/UserInput/Scripts/BallSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Project/UserInput/Scripts/BallSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Global/Extentions.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+</project>

@@ -187,7 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab41dd1ff17b24446be895fc3582717a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bounciness: 0.9
   maxPushBackForce: 2000
   pushCurve:
     serializedVersion: 2
@@ -195,20 +194,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.29009807
-      outSlope: 0.29009807
+      inSlope: 2.651026
+      outSlope: 2.651026
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.22921729
+      outWeight: 0.14604463
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2.6807923
-      outSlope: 2.6807923
+      inSlope: 0.030942291
+      outSlope: 0.030942291
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.052200615
+      inWeight: 0.28600407
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

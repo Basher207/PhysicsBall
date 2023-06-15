@@ -13,24 +13,30 @@ namespace PhysicsBall
         [SerializeField] private Camera spawnCamera;
         [SerializeField] private GameObject ballPrefab;
 
-        private GameObject InstantiateBall()
+        [SerializeField] private float fireSpeed = 5f;
+
+        private BPhysicsBall InstantiateBall()
         {
             GameObject newBall = Instantiate<GameObject>(ballPrefab);
-            return newBall;
+            BPhysicsBall physicsBall = newBall.GetComponent<BPhysicsBall>();
+
+            return physicsBall;
         }
-
-        private void SpawnBall()
+        
+        //Create a ball, and fire it at pointer 
+        private void SpawnBall(Vector2 screenPosition)
         {
-            GameObject ball = InstantiateBall();
+            BPhysicsBall physicsBall = InstantiateBall();
 
-            Vector3 WorldPosition = spawnCamera.ScreenToWorldPoint(Input.mousePosition);
+            Ray WorldPosition = spawnCamera.ScreenPointToRay(screenPosition);
 
-            ball.transform.position = WorldPosition;
+            physicsBall.transform.position = WorldPosition.origin;
+            physicsBall.velocity = WorldPosition.direction * fireSpeed;
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            SpawnBall();
+            SpawnBall(eventData.position);
         }
     }
 }

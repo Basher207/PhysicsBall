@@ -48,6 +48,7 @@ namespace PhysicsBall
         }
 
         //This region has code copied from CurvedSurface shader, for ease of iteration
+        //The math here is done using Unity.mathematics to match the style used in HLSL
 
         #region Copied from shader
 

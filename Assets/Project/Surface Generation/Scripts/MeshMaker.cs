@@ -7,6 +7,9 @@ using UnityEngine.Serialization;
 
 namespace PhysicsBall
 {
+	/// <summary>
+	/// Generates a flat mesh spiraling out from the center, getting less detailed over distance
+	/// </summary>
 	[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
 	public class MeshMaker : MonoBehaviour
 	{

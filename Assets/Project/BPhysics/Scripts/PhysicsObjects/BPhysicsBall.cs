@@ -7,9 +7,10 @@ namespace PhysicsBall
 {
     public class BPhysicsBall : MonoBehaviour, BPhysicsSimulatable
     {
-        [SerializeField] private float Radius => transform.localScale.x / 2f;
 
         [SerializeField] private float maxPushBackForce = 10f;
+        
+        [Header("Will scale the ball pushback force, depending on how penetrated it is")]
         [SerializeField] private AnimationCurve pushCurve;
         
         [Header("Compensating for fast balls glitching underground")]
@@ -17,26 +18,38 @@ namespace PhysicsBall
 
 
 
+        /// <summary>
+        /// Supposed to be called on collision, altho that's not currently being handled
+        /// </summary>
         public event Action<BCollision> OnCollisionDetected;
         
-        private Vector3 position
+        /// <summary>
+        /// For now position is used from the transform, altho can be a swapped if needed.
+        /// </summary>
+        public Vector3 position
         {
             get => transform.position;
             set => transform.position = value;
         }
-
-        private Vector3 velocity;
-        private Vector3 velocityToAddNextFrame;
+        private float Radius => transform.localScale.x / 2f;
+        
+        
+        public Vector3 velocity { get; set; }
+        
+        private Vector3 velocityToNextFrame;
         private BPhysicsSimulator bPhysicsSimulator;
 
 
 
-
+        //PlaceHolder singleton to add ball into the simulator 
         private void Start()
         {
             BPhysicsSimulator.instance.AddToSimulation(this);
         }
 
+        /// <summary>
+        /// The simulator simulating this ball.
+        /// </summary>
         public void Init(BPhysicsSimulator physicsSimulator)
         {
             bPhysicsSimulator = physicsSimulator;
@@ -62,17 +75,21 @@ namespace PhysicsBall
         
         
         
-        
+        /// <summary>
+        /// Compute forces that would need to be added
+        /// Note the staged calculation is used for more advanced collision detection
+        /// that isn't hear yet.
+        /// </summary>
         public void BPhysicsComputeForces()
         {
-            velocityToAddNextFrame += bPhysicsSimulator.Gravity * bPhysicsSimulator.DeltaTime;
+            velocityToNextFrame += bPhysicsSimulator.Gravity * bPhysicsSimulator.DeltaTime;
         }
 
         public void BPhysicsApplyForces()
         {
             ComputeCollisions();
 
-            velocity += velocityToAddNextFrame;
+            velocity += velocityToNextFrame;
 
             float airDragDivider = 1f + bPhysicsSimulator.AirDrag * bPhysicsSimulator.DeltaTime;
             velocity /= airDragDivider;
@@ -81,7 +98,7 @@ namespace PhysicsBall
 
             transform.position = position;
 
-            velocityToAddNextFrame = Vector3.zero;
+            velocityToNextFrame = Vector3.zero;
         }
         
         
@@ -98,27 +115,41 @@ namespace PhysicsBall
             Plane collisionPlane = new Plane(surfaceNormal, surfacePoint);
             float distanceToPlaneSurface = collisionPlane.GetDistanceToPoint(position);
 
-            //Is the ball moving away, or towards the collisionPlane
+            //Is the ball moving away, or towards the collisionPlane?
             bool movingTowardsPlane = Vector3.Dot(collisionPlane.normal, velocity) < 0;
             
+            //Is the plane penetrating the surface of the ball? If so by how much 
             float penetration = Radius - Mathf.Abs(distanceToPlaneSurface);
 
+            //Penetration normalised between 0 and 1
             float normalPenetration = penetration / Radius;
-
+            
+            //If the ball is being penetrated, and its moving towards the plane:
+            //Handle collision! by making it only collide when movingTowardsPlane. It 
+            //Allows for better rolling, altho better simulation can be done by not doing this.
             if (penetration > 0f && movingTowardsPlane)
             {
+                //How much should the push back force be?
                 float pushBackNormalised = pushCurve.Evaluate(normalPenetration);
                 float pushBackForce = pushBackNormalised * maxPushBackForce;
 
-                velocityToAddNextFrame += collisionPlane.normal * (pushBackForce * bPhysicsSimulator.DeltaTime);
+                //Add velocity pushing away from the plane, using the calculated pushBackForce
+                velocityToNextFrame += collisionPlane.normal * (pushBackForce * bPhysicsSimulator.DeltaTime);
 
+                //The division that would represent the velocity loss due to friction
                 float frictionDivider =
                     1f + bPhysicsSimulator.FrictionDrag * pushBackNormalised * bPhysicsSimulator.DeltaTime;
 
+                //Breaking down the velocity into two parts: Pointing towards the normal, and not.
+                //friction should only apply to velocity along the friction surface, thereby not to any velocity 
+                //pointing away from the normal. 
                 Vector3 portionOfVelocityTowardsNormal = surfaceNormal * Vector3.Dot(surfaceNormal, velocity);
                 Vector3 portionOfVelocityNotTowardsNormal = velocity - portionOfVelocityTowardsNormal;
-
+                
+                //Apply the frictionDivider to the portionOfVelocityNotTowardsNormal
                 portionOfVelocityNotTowardsNormal /= frictionDivider;
+                
+                //Recombine the two parts into a post friction velocity.
                 velocity = portionOfVelocityTowardsNormal + portionOfVelocityNotTowardsNormal;
             }
 
@@ -128,7 +159,7 @@ namespace PhysicsBall
             float heightFromSurfacePoint = position.y - surfacePoint.y;
             if (heightFromSurfacePoint < 0f)
             {
-                velocityToAddNextFrame += new Vector3(0f, belowSurfacePushForce, 0f) * bPhysicsSimulator.DeltaTime;
+                velocityToNextFrame += new Vector3(0f, belowSurfacePushForce, 0f) * bPhysicsSimulator.DeltaTime;
             }
             
             

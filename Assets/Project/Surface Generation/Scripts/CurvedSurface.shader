@@ -3,7 +3,6 @@ Shader "PhysicsBall/CurvedSurface"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "black" {}
-		_lineDensity("Line Density", float) = 0.1
 		_texturedArea("Textured Area", Vector) = (0,0,10,10)
 		_untexturedColor("Untextured Color", Color) = (0,0,0,1)
 	}
@@ -44,9 +43,11 @@ Shader "PhysicsBall/CurvedSurface"
 			float _lineDensity;
 			float4 _texturedArea;
 			float4 _untexturedColor;
-			float _wavePropagationOffset;
 
-			
+
+			//This area is copy pasted from/to BPhysicsSurface for consistency
+			//If the math changes, copy them across to match the calculation 
+			float _wavePropagationOffset;
 			float GetYPosAtUvPoint (float2 pos)
 			{
 				float firstTerm = 0.3f * sin(_wavePropagationOffset + 3 * sqrt(pow(pos.x - 5, 2) + pow(pos.y - 5, 2)));
@@ -65,6 +66,9 @@ Shader "PhysicsBall/CurvedSurface"
 		
     		    return normal;
     		}
+			//End copy area
+
+			
 
 			float mapf(float s, float a1, float a2, float b1, float b2)
 			{
@@ -87,22 +91,8 @@ Shader "PhysicsBall/CurvedSurface"
 				return o;
 			}
 			
-			float4 WhiteHightGraph (float yPos)
-			{
-				float modular = fmod(abs(yPos), _lineDensity) / _lineDensity;
-				
-				float c3 = (modular < 0.05) ? 1 : 0;
-				
-				float4 col = float4(0, 0, 0, 0);
-				return col;
-			}
-			float4 GetColor (v2f i)
-			{
-				float yPos = GetYPosAtUvPoint(i.uv);
-				
-				float4 linesColor = WhiteHightGraph(yPos);
+			fixed4 frag (v2f i) : SV_Target {
 				float4 textureColor = tex2D(_MainTex, i.uv.xy);
-
 				
 				float2 bottomLeft = _texturedArea.xy;
 				float2 topRight = _texturedArea.xy + _texturedArea.zw;
@@ -112,14 +102,10 @@ Shader "PhysicsBall/CurvedSurface"
 					textureColor = _untexturedColor;
 				}
 
+				//Using the normal to add some shading on the surface
 				textureColor.rgb *= float3(1,1,1) * mapf(i.normal.y, 0.5, 1, 0, 1);
 				
-				float4 finalColor = linesColor.a > 0 ? linesColor : textureColor;
-				
-				return finalColor;
-			}
-			fixed4 frag (v2f i) : SV_Target {
-				return GetColor(i);
+				return textureColor;
 			}
 			ENDCG
 		}
